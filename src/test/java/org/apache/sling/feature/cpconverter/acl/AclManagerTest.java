@@ -98,20 +98,20 @@ public class AclManagerTest {
         assertNotNull(repoinitExtension);
 
         // acs-commons-on-deploy-scripts-service will be missed
-        String expected = "create path (rep:AuthorizableFolder) /asd/public\n" + // SLING-8586
-                "create service user acs-commons-package-replication-status-event-service with path /asd/public\n" +
-                "create path (sling:Folder) /asd\n" +
-                "create path (sling:Folder) /asd/not\n" +
-                "create path (sling:Folder) /asd/not/system\n" +
-                "create path (sling:Folder) /asd/not/system/user\n" +
-                "create path (sling:Folder) /asd/not/system/user/path\n" +
+        String expected = "create path (rep:AuthorizableFolder) /asd/public" + System.lineSeparator() + // SLING-8586
+                "create service user acs-commons-package-replication-status-event-service with path /asd/public" + System.lineSeparator() +
+                "create path (sling:Folder) /asd" + System.lineSeparator() +
+                "create path (sling:Folder) /asd/not" + System.lineSeparator() +
+                "create path (sling:Folder) /asd/not/system" + System.lineSeparator() +
+                "create path (sling:Folder) /asd/not/system/user" + System.lineSeparator() +
+                "create path (sling:Folder) /asd/not/system/user/path" + System.lineSeparator() +
                 // see SLING-8561
                 // "set ACL for acs-commons-package-replication-status-event-service\n" +
                 // "allow jcr:read,crx:replicate,jcr:removeNode on /asd/public\n" +
                 // "end\n" +
-                "set ACL for acs-commons-ensure-oak-index-service\n" +
-                "allow jcr:read,rep:write,rep:indexDefinitionManagement on /asd/not/system/user/path\n" +
-                "end\n";
+                "set ACL for acs-commons-ensure-oak-index-service" + System.lineSeparator() +
+                "allow jcr:read,rep:write,rep:indexDefinitionManagement on /asd/not/system/user/path" + System.lineSeparator() +
+                "end" + System.lineSeparator();
         String actual = repoinitExtension.getText();
         assertEquals(expected, actual);
 

@@ -110,7 +110,7 @@ public final class DefaultAclManager implements AclManager {
 
                 // make sure all users are created first
 
-                formatter.format("create service user %s with path %s%n", systemUser.getId(), systemUser.getPath());
+                formatter.format("create service user %s with path %s%n", systemUser.getId(), toStringForwardSlashes(systemUser.getPath()));
 
                 // clean the unneeded ACLs, see SLING-8561
 
@@ -179,7 +179,7 @@ public final class DefaultAclManager implements AclManager {
 
     private final void addSystemUserPath(Formatter formatter, Path path) {
         if (preProvidedSystemPaths.add(path)) {
-            formatter.format("create path (rep:AuthorizableFolder) %s%n", path);
+            formatter.format("create path (rep:AuthorizableFolder) %s%n", toStringForwardSlashes(path));
         }
     }
 
@@ -215,11 +215,11 @@ public final class DefaultAclManager implements AclManager {
         for (Path path : paths) {
             String type = computePathType(path, packageAssemblers);
 
-            formatter.format("create path (%s) %s%n", type, path);
+            formatter.format("create path (%s) %s%n", type, toStringForwardSlashes(path));
         }
     }
 
-    private static String computePathType(Path path, List<VaultPackageAssembler> packageAssemblers) {
+	private static String computePathType(Path path, List<VaultPackageAssembler> packageAssemblers) {
         path = Paths.get(PlatformNameFormat.getPlatformPath(path.toString()));
 
         for (VaultPackageAssembler packageAssembler: packageAssemblers) {
@@ -254,7 +254,7 @@ public final class DefaultAclManager implements AclManager {
             formatter.format("%s %s on %s",
                              authorization.getOperation(),
                              authorization.getPrivileges(),
-                             authorization.getRepositoryPath());
+                             toStringForwardSlashes(authorization.getRepositoryPath()));
 
             if (!authorization.getRestrictions().isEmpty()) {
                 formatter.format(" restriction(%s)",
@@ -270,5 +270,11 @@ public final class DefaultAclManager implements AclManager {
     private static boolean areEmpty(List<Acl> authorizations) {
         return authorizations == null || authorizations.isEmpty();
     }
-
+    
+    private static String toStringForwardSlashes(Path path) {
+    	if (path == null)
+    		return null;
+    	
+    	return path.toString().replace('\\', '/');
+	}
 }
