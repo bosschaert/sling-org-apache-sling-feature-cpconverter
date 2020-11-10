@@ -137,14 +137,14 @@ public class AclManagerTest {
         Extension repoinitExtension = feature.getExtensions().getByName(Extension.EXTENSION_NAME_REPOINIT);
         assertNotNull(repoinitExtension);
 
-        String expected = "create path (rep:AuthorizableFolder) /home/users/system\n" + // SLING-8586
-                "create service user sys-usr with path /home/users/system\n" +
-                "create path (sling:Folder) /content\n" +
-                "create path (sling:Folder) /content/cq:tags\n" +
-                "set ACL for sys-usr\n" +
-                "allow jcr:read on /content/cq:tags\n" +
-                "allow jcr:write on /content/cq:tags\n" +
-                "end\n";
+        String expected = "create path (rep:AuthorizableFolder) /home/users/system" + System.lineSeparator() + // SLING-8586
+                "create service user sys-usr with path /home/users/system" + System.lineSeparator() +
+                "create path (sling:Folder) /content" + System.lineSeparator() +
+                "create path (sling:Folder) /content/cq:tags" + System.lineSeparator() +
+                "set ACL for sys-usr" + System.lineSeparator() +
+                "allow jcr:read on /content/cq:tags" + System.lineSeparator() +
+                "allow jcr:write on /content/cq:tags" + System.lineSeparator() +
+                "end" + System.lineSeparator();
 
         String actual = repoinitExtension.getText();
         assertEquals(expected, actual);
