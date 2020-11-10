@@ -16,24 +16,6 @@
  */
 package org.apache.sling.feature.cpconverter.handlers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.StringReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.jackrabbit.vault.fs.io.Archive;
 import org.apache.jackrabbit.vault.fs.io.Archive.Entry;
 import org.apache.sling.feature.ArtifactId;
@@ -45,6 +27,7 @@ import org.apache.sling.feature.cpconverter.acl.DefaultAclManager;
 import org.apache.sling.feature.cpconverter.acl.SystemUser;
 import org.apache.sling.feature.cpconverter.features.DefaultFeaturesManager;
 import org.apache.sling.feature.cpconverter.features.FeaturesManager;
+import org.apache.sling.feature.cpconverter.shared.RepoPath;
 import org.apache.sling.feature.cpconverter.vltpkg.VaultPackageAssembler;
 import org.apache.sling.repoinit.parser.RepoInitParser;
 import org.apache.sling.repoinit.parser.impl.RepoInitParserService;
@@ -52,6 +35,22 @@ import org.apache.sling.repoinit.parser.operations.Operation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public final class RepPolicyEntryHandlerTest {
 
@@ -183,7 +182,8 @@ public final class RepPolicyEntryHandlerTest {
 
     @Test
     public void systemUserAclSetNotForUserPath() throws Exception {
-        ParseResult result = parseAndSetRepoinit(new SystemUser("acs-commons-package-replication-status-event-service", Paths.get("/this/is/a/completely/different/path")));
+        ParseResult result = parseAndSetRepoinit(new SystemUser("acs-commons-package-replication-status-event-service",
+                new RepoPath("/this/is/a/completely/different/path")));
         Extension repoinitExtension = result.getRepoinitExtension();
         assertNotNull(repoinitExtension);
         assertEquals(ExtensionType.TEXT, repoinitExtension.getType());
@@ -225,7 +225,7 @@ public final class RepPolicyEntryHandlerTest {
     }
 
     private ParseResult parseAndSetRepoinit(String...systemUsersNames) throws Exception {
-        Path alwaysTheSamePath = Paths.get("/asd/public");
+        RepoPath alwaysTheSamePath = new RepoPath("/asd/public");
 
         SystemUser[] systemUsers = new SystemUser[systemUsersNames.length];
         for (int i = 0; i < systemUsersNames.length; i++) {
